@@ -5,6 +5,7 @@
 //  Created by Dorothy Ntende on 6/26/23.
 //
 
+
 #include <iostream>
 using namespace std;
 
@@ -353,6 +354,11 @@ bool allZeros(int matrix[][COLUMNS])
 
 void guess(int& guess1,int& points,int&int1, int& int2, int matrix2[][COLUMNS])
 {
+    bool var1,var2,var3,var4;
+    var1= false;
+    var2= false;
+    var3= false;
+    var4 = false;
     
     for(int i = 0 ; i < ROWS; i++)
                      {
@@ -361,12 +367,19 @@ void guess(int& guess1,int& points,int&int1, int& int2, int matrix2[][COLUMNS])
                              if(guess1 == matrix2[i][j]&& (int1==-1&&int2==-1))
                              {
                                  points+=5;
+                                 var1= true;
                                  break;
                              }
                              
                              }
                          
                      }
+    if(var1)
+    {
+        cout <<" you guessed correctly and you have not used any bounds\n";
+        cout <<" 5 points will be added to your points balance\n";
+    }
+    cout <<endl;
     for(int i = 0 ; i < ROWS; i++)
                      {
                          for(int j =0; j < COLUMNS; j++)
@@ -375,27 +388,42 @@ void guess(int& guess1,int& points,int&int1, int& int2, int matrix2[][COLUMNS])
                              {
                                 // cout <<" you guessed correctly and you have not used any bounds\n";
                                  points+=1;
+                                 var2 = true;
                                  break;
                              }
                              }
             
                         // cout <<"points:" << points << " "<<endl;
                      }
+    if(var2)
+    {
+     cout <<" you guessed correctly and you have an upper or lower bound\n";
+        cout<<"1 point will be added to your points balance\n";
+    }
+    cout <<endl;
     
     for(int i = 0 ; i < ROWS; i++)
                      {
+                         
                          for(int j =0; j < COLUMNS; j++)
                          {
                              if(guess1 != matrix2[i][j]&& (int1!=-1||int2!=-1))
                              {
                                 // cout <<" you guessed correctly and you have not used any bounds\n";
                                  points-=10;
+                                 var3=true;
                                  break;
                              }
                         }
-            
-                        // cout <<"points:" << points << " "<<endl;
+
                      }
+    if(var3)
+    {
+     cout <<" you guessed incorrectly and you have an upper or lower bound\n";
+        cout<<"10 points will be deducted from your points balance\n";
+    }
+    cout <<endl;
+    
     
     for(int i = 0 ; i < ROWS; i++)
                      {
@@ -403,17 +431,20 @@ void guess(int& guess1,int& points,int&int1, int& int2, int matrix2[][COLUMNS])
                          {
                              if(guess1 != matrix2[i][j]&& (int1==-1&&int2==-1))
                              {
-                                // cout <<" you guessed correctly and you have not used any bounds\n";
                                  points-=1;
+                                 var4=true;
                                  break;
                              }
-                             }
-            
-                        // cout <<"points:" << points << " "<<endl;
-                     }
-    
+                         }
 
- 
+                     }
+    if(var4)
+    {
+     cout <<" you guessed incorrectly and you have an upper or lower bound\n";
+        cout<<"1 points will be deducted from your points balance\n";
+    }
+                         cout <<endl;
+
 }
 
 
@@ -430,3 +461,5 @@ void setdisplayRight(int&int2, int& upper_bound)
     int2 = upper_bound;
     cout<<endl;
 }
+
+
