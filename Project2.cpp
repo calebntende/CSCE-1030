@@ -21,12 +21,15 @@ enum GameOption {
     Exit=5
 };
 
-void guess(int& guess,int& points,int& int1,int& int2, int matrix2[][COLUMNS]);
+void guess(int& guess1,int& points,int& int1,int& int2, int matrix2[][COLUMNS]);
+
+void setdisplayLeft(int&int1, int& lowerbound);
+void setdisplayRight(int&int2, int& upper_bound);
 
 bool allZeros(int matrix[][COLUMNS]);
-void eliminate(int & guess,int matrix[][COLUMNS],int matrix2[][COLUMNS]);
+void eliminate(int & guess1,int matrix[][COLUMNS],int matrix2[][COLUMNS]);
 
-void showMatrix(int & guess,int matrix[][COLUMNS],int matrix2[][COLUMNS]);
+void showMatrix(int & guess1,int matrix[][COLUMNS],int matrix2[][COLUMNS]);
 string getName(string name)
 {
     char a;
@@ -101,46 +104,60 @@ int main(int argc, const char * argv[])
     cout <<"enter a name\n";
     getline(cin,name);
     getName(name);
-    
+    cout <<endl;
     cout <<"your name is "<< name<<endl;
-
+    cout <<endl;
     genShowMatix(matrix);
     
     
     int points,lower_bound, upper_bound,int1,int2;
     int1=-1;
-    int2=-2;
+    int2=-1;
     points = 100;
     
     int gamechoice ;
+    cout <<endl;
+    
+    cout << int1 << " " << int2<<endl;
+    cout <<endl;
+    cout <<" enter what game option you want\n displayLeft = 1 \n displayRight = 2 \n Guess = 3\n Change = 4\n or Exit = 5 \n";
+    
     cout<<"enter you choice\n";
     cin >>gamechoice;
     
    
-    
+     genHideMatrix(lower_bound, upper_bound,matrix2);
     
     while(points >0)
     {
-        int guess;
-        genHideMatrix(lower_bound, upper_bound,matrix2);
+        
+       
+        
+        int guess1;
+       // genHideMatrix(lower_bound, upper_bound,matrix2);
         switch(gamechoice)
         {
+               
                 
             case displayLeft:
-                
-                
+                setdisplayLeft(int1,lower_bound);
+                points--;
                 break;
             case displayRight:
-                
+                setdisplayRight(int2, upper_bound);
+                points--;
                 break;
             case Guess:
             
                 cout<< "guess a number\n";
-                cin >>guess;
+                cin >>guess1;
                 
                 
                 
-                eliminate(guess,matrix,matrix2);
+                
+                eliminate(guess1,matrix,matrix2);
+                guess(guess1, points, int1, int2, matrix2);
+                
                 
                 break;
             case Reset:
@@ -150,16 +167,55 @@ int main(int argc, const char * argv[])
                 break;
             case Exit:
                 
+                
+                exit(0);
                 break;
                 
         }
         
-        int num_guess;
         
-        showMatrix(guess, matrix, matrix2);
-        cout<<"current points balance " << points <<" " <<endl;
+        
+        
+        showMatrix(guess1, matrix, matrix2);
+        
+        if(allZeros(matrix))
+        {
+            cout <<" you have won the game"<<endl;
+            char playagain;
+            cout <<"do you want to play again enter y or n \n";
+            cin >>playagain;
+            if( playagain == 'y' || playagain == 'Y')
+            {
+                cout <<"restarting the game\n";
+                initialization(lower_bound, upper_bound, matrix2);
+            }
+            else
+            {
+                cout <<"thank you for playing the game\n";
+                exit(0);
+            }
+            
+        }
+        
+        
+        cout <<" enter what game option you want\n displayLeft = 1 \n displayRight = 2 \n Guess = 3\n Change = 4\n or Exit = 5 \n";
+                cout << int1 << " " << int2<<endl;
+                cout<<"current points balance " << points <<" " <<endl;
                         cout<<"enter your choice ";
                         cin >> gamechoice;
+    
+       
+        
+        while(gamechoice ==1 &&(int2!=-1))
+        {
+            cout <<"you have already used your upperbound enter a valid game choice\n";
+            cin >> gamechoice;
+        }
+        while(gamechoice ==2 &&(int1!=-1))
+        {
+            cout <<"you have already used your upperbound enter a valid game choice\n";
+            cin >> gamechoice;
+        }
         
         
         
@@ -171,7 +227,7 @@ int main(int argc, const char * argv[])
     
     
     
-    cout << lower_bound<<endl;
+    cout << "thank you for playing the game"<<endl;
     cout<<endl;
     
     
@@ -189,6 +245,7 @@ void genShowMatix(int matrix[ROWS][COLUMNS])
         for(int j =0; j < COLUMNS; j++)
         {
             matrix[i][j]=-1;
+            
         }
     }
     for(int i = 0 ; i < ROWS; i++)
@@ -202,13 +259,13 @@ void genShowMatix(int matrix[ROWS][COLUMNS])
 
 }
 
-void eliminate(int & guess,int matrix[][COLUMNS],int matrix2[][COLUMNS])
+void eliminate(int & guess1,int matrix[][COLUMNS],int matrix2[][COLUMNS])
 {
     for(int i = 0 ; i < ROWS; i++)
                      {
                          for(int j =0; j < COLUMNS; j++)
                          {
-                            if(guess == matrix2[i][j])
+                            if(guess1 == matrix2[i][j])
                             {
                                 matrix[i][j]=0;
                             }
@@ -218,30 +275,30 @@ void eliminate(int & guess,int matrix[][COLUMNS],int matrix2[][COLUMNS])
 
 
 }
-void showMatrix(int& guess,int matrix[][COLUMNS],int matrix2[][COLUMNS])
+void showMatrix(int& guess1,int matrix[][COLUMNS],int matrix2[][COLUMNS])
 {
     
-    for(int i = 0 ; i < ROWS; i++)
+    /*for(int i = 0 ; i < ROWS; i++)
     {
         for(int j =0; j < COLUMNS; j++)
         {
             matrix[i][j]=-1;
         }
-    }
+    }*/
     
     
-    for(int i = 0 ; i < ROWS; i++)
+   for(int i = 0 ; i < ROWS; i++)
                      {
                          for(int j =0; j < COLUMNS; j++)
                          {
-                            if(guess == matrix2[i][j])
+                            if(guess1 == matrix2[i][j])
                             {
                                 matrix[i][j]=0;
                             }
-                             
+  
                          }
                      }
-   
+    
     for(int i = 0 ; i < ROWS; i++)
     {
         for(int j =0; j <COLUMNS; j++)
@@ -253,7 +310,7 @@ void showMatrix(int& guess,int matrix[][COLUMNS],int matrix2[][COLUMNS])
     
 }
 
-void initialization (int& lower_bound , int& upper_bound,int matrix2[ROWS][COLUMNS])
+void initialization (int& lower_bound , int& upper_bound, int matrix2[ROWS][COLUMNS])
 {
     lower_bound = (rand()%100)+100;
     upper_bound = (rand()%100)+200;
@@ -267,8 +324,7 @@ void initialization (int& lower_bound , int& upper_bound,int matrix2[ROWS][COLUM
     {
         for(int j =0; j < COLUMNS; j++)
         {
-            
-            matrix2[i][j] = (rand()%((upper_bound-lower_bound+1)))+lower_bound;
+          matrix2[i][j] = (rand()%((upper_bound-lower_bound+1)))+lower_bound;
         }
     }
     cout <<endl;
@@ -295,21 +351,82 @@ bool allZeros(int matrix[][COLUMNS])
         return true; // All elements are zero
 }
 
-void guess(int& guess,int& points,int&int1, int& int2, int matrix2[][COLUMNS])
+void guess(int& guess1,int& points,int&int1, int& int2, int matrix2[][COLUMNS])
 {
     
     for(int i = 0 ; i < ROWS; i++)
                      {
                          for(int j =0; j < COLUMNS; j++)
                          {
-                            if(guess == matrix2[i][j]&& (int1==-1&&int2==-1))
-                            {
-                                cout <<" you guessed correctly and you have not used any bounds\n";
-                                points+=5;
-                            }
+                             if(guess1 == matrix2[i][j]&& (int1==-1&&int2==-1))
+                             {
+                                 points+=5;
+                                 break;
+                             }
                              
-                             
-                         }
+                             }
+                         
                      }
+    for(int i = 0 ; i < ROWS; i++)
+                     {
+                         for(int j =0; j < COLUMNS; j++)
+                         {
+                             if(guess1 == matrix2[i][j]&& (int1!=-1||int2!=-1))
+                             {
+                                // cout <<" you guessed correctly and you have not used any bounds\n";
+                                 points+=1;
+                                 break;
+                             }
+                             }
+            
+                        // cout <<"points:" << points << " "<<endl;
+                     }
+    
+    for(int i = 0 ; i < ROWS; i++)
+                     {
+                         for(int j =0; j < COLUMNS; j++)
+                         {
+                             if(guess1 != matrix2[i][j]&& (int1!=-1||int2!=-1))
+                             {
+                                // cout <<" you guessed correctly and you have not used any bounds\n";
+                                 points-=10;
+                                 break;
+                             }
+                        }
+            
+                        // cout <<"points:" << points << " "<<endl;
+                     }
+    
+    for(int i = 0 ; i < ROWS; i++)
+                     {
+                         for(int j =0; j < COLUMNS; j++)
+                         {
+                             if(guess1 != matrix2[i][j]&& (int1==-1&&int2==-1))
+                             {
+                                // cout <<" you guessed correctly and you have not used any bounds\n";
+                                 points-=1;
+                                 break;
+                             }
+                             }
+            
+                        // cout <<"points:" << points << " "<<endl;
+                     }
+    
+
+ 
 }
 
+
+void setdisplayLeft(int&int1, int& lower_bound)
+{
+    cout <<"here is the lowerbound\n";
+    int1 = lower_bound;
+    cout <<endl;
+    
+}
+void setdisplayRight(int&int2, int& upper_bound)
+{
+    cout <<"here is the upperbound\n";
+    int2 = upper_bound;
+    cout<<endl;
+}
