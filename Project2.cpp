@@ -22,7 +22,7 @@ enum GameOption {
     Exit=5
 };
 
-void guess(int& guess1,int& points,int& int1,int& int2, int matrix2[][COLUMNS]);
+int guess(int& guess1,int& points,int& int1,int& int2, int matrix2[][COLUMNS]);
 
 void setdisplayLeft(int&int1, int& lowerbound);
 void setdisplayRight(int&int2, int& upper_bound);
@@ -150,7 +150,7 @@ int main(int argc, const char * argv[])
                 break;
             case Guess:
             
-                cout<< "guess a number\n";
+               cout<< "guess a number\n";
                 cin >>guess1;
                 
                 
@@ -159,6 +159,7 @@ int main(int argc, const char * argv[])
                 eliminate(guess1,matrix,matrix2);
                 guess(guess1, points, int1, int2, matrix2);
                 
+                                
                 
                 break;
             case Reset:
@@ -178,7 +179,7 @@ int main(int argc, const char * argv[])
         
         
         showMatrix(guess1, matrix, matrix2);
-        
+        cout <<endl;
         if(allZeros(matrix))
         {
             cout <<" you have won the game"<<endl;
@@ -197,11 +198,13 @@ int main(int argc, const char * argv[])
             }
             
         }
-        
-        
-        cout <<" enter what game option you want\n displayLeft = 1 \n displayRight = 2 \n Guess = 3\n Change = 4\n or Exit = 5 \n";
+ cout <<" enter what game option you want\n displayLeft = 1 \n displayRight = 2 \n Guess = 3\n Change = 4\n or Exit = 5 \n";
                 cout << int1 << " " << int2<<endl;
-                cout<<"current points balance " << points <<" " <<endl;
+        
+        
+        if(points)
+        
+                cout<<"updated points balance " << points <<" " <<endl;
                         cout<<"enter your choice ";
                         cin >> gamechoice;
     
@@ -217,17 +220,9 @@ int main(int argc, const char * argv[])
             cout <<"you have already used your upperbound enter a valid game choice\n";
             cin >> gamechoice;
         }
-        
-        
-        
-        
+    
     }
-    
-    
-    
-    
-    
-    
+ 
     cout << "thank you for playing the game"<<endl;
     cout<<endl;
     
@@ -262,6 +257,8 @@ void genShowMatix(int matrix[ROWS][COLUMNS])
 
 void eliminate(int & guess1,int matrix[][COLUMNS],int matrix2[][COLUMNS])
 {
+    
+    
     for(int i = 0 ; i < ROWS; i++)
                      {
                          for(int j =0; j < COLUMNS; j++)
@@ -352,33 +349,33 @@ bool allZeros(int matrix[][COLUMNS])
         return true; // All elements are zero
 }
 
-void guess(int& guess1,int& points,int&int1, int& int2, int matrix2[][COLUMNS])
+int guess(int& guess1,int& points,int&int1, int& int2, int matrix2[][COLUMNS])
 {
     bool var1,var2,var3,var4;
     var1= false;
-    var2= false;
-    var3= false;
+    var2=false;
+    var3=false;
     var4 = false;
     
     for(int i = 0 ; i < ROWS; i++)
                      {
+                         
                          for(int j =0; j < COLUMNS; j++)
                          {
                              if(guess1 == matrix2[i][j]&& (int1==-1&&int2==-1))
                              {
                                  points+=5;
                                  var1= true;
+                                 cout<<"You guessed correctly. You get 5 points."<<endl;
+                                return points;
                                  break;
                              }
                              
-                             }
+                            }
                          
                      }
-    if(var1)
-    {
-        cout <<" you guessed correctly and you have not used any bounds\n";
-        cout <<" 5 points will be added to your points balance\n";
-    }
+  
+   
     cout <<endl;
     for(int i = 0 ; i < ROWS; i++)
                      {
@@ -388,18 +385,15 @@ void guess(int& guess1,int& points,int&int1, int& int2, int matrix2[][COLUMNS])
                              {
                                 // cout <<" you guessed correctly and you have not used any bounds\n";
                                  points+=1;
-                                 var2 = true;
+                                 cout<<"You guessed correctly. You get 1 points. "<<endl;
+                                 return points;
                                  break;
                              }
                              }
             
                         // cout <<"points:" << points << " "<<endl;
                      }
-    if(var2)
-    {
-     cout <<" you guessed correctly and you have an upper or lower bound\n";
-        cout<<"1 point will be added to your points balance\n";
-    }
+   
     cout <<endl;
     
     for(int i = 0 ; i < ROWS; i++)
@@ -411,39 +405,38 @@ void guess(int& guess1,int& points,int&int1, int& int2, int matrix2[][COLUMNS])
                              {
                                 // cout <<" you guessed correctly and you have not used any bounds\n";
                                  points-=10;
-                                 var3=true;
+                                 cout<<"You guessed in correctly. You lose 10 points. "<<endl;
+                                return points;
                                  break;
                              }
                         }
 
                      }
-    if(var3)
-    {
-     cout <<" you guessed incorrectly and you have an upper or lower bound\n";
-        cout<<"10 points will be deducted from your points balance\n";
-    }
+  
     cout <<endl;
-    
-    
+    bool guess2=false;
+    int count =0;
     for(int i = 0 ; i < ROWS; i++)
-                     {
+    {
                          for(int j =0; j < COLUMNS; j++)
                          {
-                             if(guess1 != matrix2[i][j]&& (int1==-1&&int2==-1))
+                             if((  guess1 != matrix2[i][j] ))
                              {
+                                 
                                  points-=1;
-                                 var4=true;
+                                 cout<<" You guessed incorrectly. You lose 1 points."<<endl;
+                                 //guess2= true;
+                                 //var4 = true;
+                                return points;
                                  break;
                              }
                          }
 
                      }
-    if(var4)
-    {
-     cout <<" you guessed incorrectly and you have an upper or lower bound\n";
-        cout<<"1 points will be deducted from your points balance\n";
-    }
-                         cout <<endl;
+   
+    return  points;
+   
+                       
 
 }
 
@@ -461,5 +454,3 @@ void setdisplayRight(int&int2, int& upper_bound)
     int2 = upper_bound;
     cout<<endl;
 }
-
-
